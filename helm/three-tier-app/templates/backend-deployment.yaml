@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+
+  # Keep previous ReplicaSets so we can rollback
+  revisionHistoryLimit: 5
+
+  # Mark rollout as failed if progress is not made within this time
+  progressDeadlineSeconds: 120
+
+  # Rolling update strategy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  selector:
+    matchLabels:
+      app: backend
+
+  template:
+    metadata:
+      labels:
+        app: backend
+
+    spec:
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+
+      containers:
+        - name: backend
+
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+
+          ports:
+            - containerPort: 5001
+              protocol: TCP
+
+          # Checks whether the application is ready
+          # to receive traffic.
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 5001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          # Checks whether the application is still alive.
+          # Repeated failure causes the container to be restarted.
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 5001
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          # Application configuration
+          envFrom:
+            - configMapRef:
+                name: backend-config
+
+            # Database credentials
+            - secretRef:
+                name: backend-db-secret
+
+          # CPU and memory configuration
+          resources:
+            {{- toYaml .Values.backend.resources | nindent 12 }}

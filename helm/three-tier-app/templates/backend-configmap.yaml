@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+data:
+  PORT: {{ .Values.backendConfig.port | quote }}
+  DB_HOST: {{ .Values.backendConfig.dbHost | quote }}
+  DB_PORT: {{ .Values.backendConfig.dbPort | quote }}
+  DB_NAME: {{ .Values.backendConfig.dbName | quote }}
