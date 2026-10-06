@@ -123,7 +123,7 @@ function App() {
         <div>
           <p className="eyebrow">THREE-TIER APPLICATION</p>
 
-          <h1>Three-Tier AWS Task App - CI/CD v2</h1>
+          <h1>Three-Tier AWS Task App - CI/CD UI Changed</h1>
 
           <p className="subtitle">
             A production-style task management application built with React,
