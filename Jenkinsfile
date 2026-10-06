@@ -12,6 +12,7 @@ pipeline {
 
         KUBE_NAMESPACE = 'three-tier'
         HELM_RELEASE = 'three-tier-app'
+        KUBECONFIG = '/home/ubuntu/.kube/config'
     }
 
     stages {
