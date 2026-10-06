@@ -83,12 +83,12 @@ pipeline {
             steps {
                 sh '''
                     kubectl rollout status \
-                      deployment/three-tier-app-backend \
+                      deployment/backend \
                       -n "$KUBE_NAMESPACE" \
                       --timeout=180s
 
                     kubectl rollout status \
-                      deployment/three-tier-app-frontend \
+                      deployment/frontend \
                       -n "$KUBE_NAMESPACE" \
                       --timeout=180s
 
