@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'amd64-builder'
+    }
 
     environment {
         AWS_REGION = 'ap-south-1'
@@ -47,12 +49,10 @@ pipeline {
             steps {
                 sh '''
                     podman build \
-                      --platform linux/amd64 \
                       -t "${BACKEND_IMAGE}:${BUILD_NUMBER}" \
                       application/backend
 
                     podman build \
-                      --platform linux/amd64 \
                       -t "${FRONTEND_IMAGE}:${BUILD_NUMBER}" \
                       application/frontend
                 '''
