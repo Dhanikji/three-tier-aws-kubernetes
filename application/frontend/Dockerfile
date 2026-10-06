@@ -11,7 +11,7 @@ COPY . .
 RUN npm run build
 
 
-FROM nginx:alpine
+FROM docker.io/library/nginx:alpine
 
 RUN rm -rf /usr/share/nginx/html/*
 
